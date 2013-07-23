@@ -1,0 +1,19 @@
+{
+  "name": "promisable",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {},
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/tape/bin/tape $(find test -name '*.js')"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iarna/promisable.git"
+  },
+  "devDependencies": {
+    "tape": "~1.0.4",
+    "q": "*"
+  },
+  "license": "BSD"
+}
