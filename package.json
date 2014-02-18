@@ -1,6 +1,7 @@
 {
   "name": "promisable",
-  "version": "1.0.0",
+  "description": "Promises meet continuables",
+  "version": "1.0.1",
   "dependencies": {},
   "main": "index.js",
   "scripts": {
