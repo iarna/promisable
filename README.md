@@ -1,11 +1,7 @@
-# WIP WIP WIP
-
 Promiseable
 -----------
 
-Promises and continuables(ish)
-
-A minimal Continuables(ish)/Promises implementation.
+Promises meet continuables 
 
 Features
 --------
@@ -22,12 +18,15 @@ Deviations From Prior Art
 -------------------------
 
 * Continuables, as defined by creationix, take signature of (onFullfill,onReject)
-  much like the `then` method in Promises/A+.
-  By contrast, these call a signature of (error,result)
-  that you need to look at, just like with normal node callbacks.
+  much like the `then` method in Promises/A+, where onFullfill's signature
+  (value) and onRejec's is (error). By contrast, promisables take a
+  signature of (onContinue), whose signature is (error,result), just like
+  with normal node callbacks.
 * Promises/A+ make resolving a promise more then once silently ignored.
   Resolving the same promise more then once is an error and should throw an
-  exception rather then just ignoring its input.
+  exception rather then just ignoring its input. (One might argue that
+  resolving a promise with the same result shouldn't be an error. Pull
+  requests would be welcome.)
 * Promises/A+ says that resolving a promise should always wait until
   nextTick to execute already existing callbacks. This slows down processing
   without any actual value. Proponents of this conflate this with ensuring
@@ -48,9 +47,8 @@ To return one from your library:
         });
     }
 
-To use one like a continuablish:
+To use one like a continuable kind of thing:
 
-    // As a continuable:
     example()(function (err,fd) {
         if (err) {
             // ...
