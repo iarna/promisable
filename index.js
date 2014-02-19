@@ -70,6 +70,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
         return promisable.then(function(){ return Promisable(resolvecb) });
     };
     promisable.catch = function (failure,success) { return promisable.then(success,failure) };
+    promisable.finally = promisable;
     return promisable;
 };
 Promisable.resolve = function (E,V) { return Promisable(function(R){ R(E,V) }) }

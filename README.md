@@ -69,11 +69,14 @@ To use one like a promise:
     // Or with chaining and a catch method, which I prefer:
     example()
         .then(function(fd) {
-            // ...
+            // if successful...
         })
         .catch(function(err) {
-            // ...
-        });
+            // if an errror
+        })
+        .finally(function() {
+            // run for both success and errors
+        })
 
 Constructing
 ------------
@@ -128,6 +131,7 @@ they'll be executed at nextTick.  If it is NOT resolved, they'll be executed
 AS SOON as the promise is resolved.
 
 * `promise(callback = function(error,result) ?-> resolveWith) -> promise`
+* `promise.finally(callback = function(error,result)?-> resolveWith) -> promise`
 
 When the promise is resolved, your callback will be called with
 `(error,result)` arguments, like typical node callbacks.
@@ -141,6 +145,7 @@ result.
 
 If a promise is rejected/resolved with an error, your callback will be
 called with that error.
+
 
 Interop
 -------
