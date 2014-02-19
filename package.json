@@ -13,7 +13,8 @@
   },
   "devDependencies": {
     "tape": "~1.0.4",
-    "q": "*"
+    "q": "*",
+    "bluebird": "*"
   },
   "license": "BSD"
 }
