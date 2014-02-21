@@ -136,7 +136,7 @@ forwarded down the chain as an error/rejection:
     .then(function() {
         throw new Error("bad");
     })
-    catch(function(error) {
+    .catch(function(error) {
     })
 
 And, *ahem*, finally, sometimes you want to execute something regardless if
