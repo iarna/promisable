@@ -22,7 +22,7 @@ For callbacks that don't produce errors you can pass through
 resolve.withoutErrors which has a signature of `(value)`.
 
     var promise = Promisable(function(resolve){
-        fs.unlink('/path/to/file', resolve.withoutErrors);
+        fs.exists('/path/to/file', resolve.withoutErrors);
     });
 
 Of course, you can directly call resolve yourself:
