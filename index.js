@@ -54,7 +54,9 @@ var Promisable = module.exports = function Promisable(resolvecb) {
     };
 
     try {
-        resolvecb(resolve);
+        var A = Array.prototype.slice.call(arguments,1);
+        A.unshift(resolve);
+        resolvecb.apply(null,A);
     }
     catch (E) {
         resolve(E);
@@ -93,7 +95,8 @@ var Promisable = module.exports = function Promisable(resolvecb) {
         });
     };
     promisable.thenPromise = function (resolvecb) {
-        return promisable.then(function(){ return Promisable(resolvecb) });
+        var args = arguments;
+        return promisable.then(function(){ return Promisable.apply(null,args) });
     };
     promisable.catch = function (failure,success) { return promisable.then(success,failure) };
     promisable.finally = function (action) {
