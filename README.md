@@ -1,7 +1,7 @@
 Promisable
 ----------
 
-Promises meet continuables 
+Promises meet continuables
 
 Making Promises
 ---------------
@@ -78,31 +78,31 @@ Using Promisables
 
 So imagine we have the promise from above:
 
-   promise(function(error, files) {
-       if (error) { console.error( error ); return }
-       // do stuff with files
-   });
+    promise(function(error, files) {
+        if (error) { console.error( error ); return }
+        // do stuff with files
+    });
 
-The above is straight forward and looks not entirely unlike a continuable. 
+The above is straight forward and looks not entirely unlike a continuable.
 But because these are full fledged promises you can chain them:
 
-   promise(function(error, files) {
-       if (error) { console.error( error ); return }
-       return files[0];
-   })(function(error, filename) {
-       if (error) return;
-       // do more things
-   })
+    promise(function(error, files) {
+        if (error) { console.error( error ); return }
+        return files[0];
+    })(function(error, filename) {
+        if (error) return;
+        // do more things
+    })
 
 You can chain to promises too:
 
-   promise(function(error, files) {
-       if (error) { console.error( error ); return }
-       return Promisable(function(resolve){ fs.unlink(files[0], resolve.withoutErrors) });
-   })(function() {
-       if (error) return;
-       // do more things 
-   })
+    promise(function(error, files) {
+        if (error) { console.error( error ); return }
+        return Promisable(function(resolve){ fs.unlink(files[0], resolve.withoutErrors) });
+    })(function() {
+        if (error) return;
+        // do more things
+    })
 
 Because we also support A+ style promise APIs, including catch for capturing errors.
 
@@ -325,7 +325,7 @@ If you provide an errorcb then it will be assumed you handled any errors.
 
 Arguments:
 
-* resolvecb = function (Resolve, value...) 
+* resolvecb = function (Resolve, value...)
 
 Returns:
 
@@ -388,7 +388,7 @@ Interop
 -------
 
 For the most part, these are compatible with Promises/A+ and their ilk, in
-so far as you can resolve an A+ promise with a promisable and vice versa. 
+so far as you can resolve an A+ promise with a promisable and vice versa.
 There are specific tests for Q and bluebird.
 
 Deviations From Promises
