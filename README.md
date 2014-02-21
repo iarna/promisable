@@ -1,5 +1,5 @@
-Promiseable
------------
+Promisable
+----------
 
 Promises meet continuables 
 
