@@ -98,7 +98,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
         var args = arguments;
         return promisable.then(function(){ return Promisable.apply(null,args) });
     };
-    promisable.catch = function (failure,success) { return promisable.then(success,failure) };
+    promisable.catch = function (failure) { return promisable.then(null,failure) };
     promisable.finally = function (action) {
         chainedErrorHandler = false;
         return promisable(action);
