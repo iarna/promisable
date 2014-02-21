@@ -178,7 +178,7 @@ API Guide
 
     var Promisable = require('promisable');
 
-## `Promisable( resolvercb[, args...] ) -> Promise`
+### `Promisable( resolvercb[, args...] ) -> Promise`
 
 Arguments:
 
@@ -197,7 +197,7 @@ If resolvecb throws an error then the promise will be rejected with that error.
 
 See below for details on methods on the Resolve and Promise objects.
 
-### `Promisable.fulfill([value]) -> Promise`
+#### `Promisable.fulfill([value]) -> Promise`
 
 Arguments:
 
@@ -208,7 +208,7 @@ Returns:
 * Promise - A new promise object already fulfilled with value (or fulfilled
   with null if no value were passed).
 
-### `Promisable.reject([error]) -> Promise`
+#### `Promisable.reject([error]) -> Promise`
 
 Arguments:
 
@@ -220,7 +220,7 @@ Returns:
   was specified the promise will be rejected with an error object equivalent
   to `new Error("Promise rejected")`
 
-### `Promisable.resolve(error,value) -> Promise`
+#### `Promisable.resolve(error,value) -> Promise`
 
 Arguments:
 
@@ -231,8 +231,8 @@ Returns:
 
 * Promise - A promise preresolved with error and value.
 
-## `Resolve(error,value)`
-## `Resolve(promise)
+### `Resolve(error,value)`
+### `Resolve(promise)`
 
 Arguments:
 
@@ -251,8 +251,8 @@ the following two lines are semantically identical:
     Resolve(promise);
     promise.then( Resolve.fulfill, Resolve.reject );
 
-### `Resolve.fulfill(value)`
-### `Resolve.withoutErrors(value)`
+#### `Resolve.fulfill(value)`
+#### `Resolve.withoutErrors(value)`
 
 Arguments:
 
@@ -264,7 +264,7 @@ withoutErrors form is there to be passed as a callback to an async function.
 As with calling Resolve as a function, if value is a promise then this
 promise will chain off of value.
 
-### `Resolve.reject(error)`
+#### `Resolve.reject(error)`
 
 Arguments:
 
@@ -273,7 +273,7 @@ Arguments:
 If no error was specified the promise will be rejected with an error object
 equivalent to `new Error("Promise rejected")`
 
-## `Promise(resultcb) -> Promise`
+### `Promise(resultcb) -> Promise`
 
 Arguments:
 
@@ -297,7 +297,7 @@ resolved the same was as the current promise.
 
 If you consume a promise this way it will be assumed you handled any errors.
 
-## `Promise.then(thencb,errorcb) -> Promise`
+### `Promise.then(thencb,errorcb) -> Promise`
 
 Arguments:
 
@@ -321,7 +321,7 @@ a function.
 If you provide an errorcb then it will be assumed you handled any errors.
 
 
-## `Promise.thenPromise(resolvecb) -> Promise`
+### `Promise.thenPromise(resolvecb) -> Promise`
 
 Arguments:
 
@@ -340,7 +340,7 @@ resolvecb result in rejecting the new promise.
 If the current promise is rejected then that reject is just chained through
 to the returned promise.
 
-## `Promise.catch(errorcb) -> Promise`
+### `Promise.catch(errorcb) -> Promise`
 
 Arguments:
 
@@ -358,7 +358,7 @@ If you have a catch it will be assumed you handled any errors.  If you
 didn't handle the error and want to pass it on to a later catch, throw the
 error.
 
-## `Promise.finally(resultcb) -> Promise`
+### `Promise.finally(resultcb) -> Promise`
 
 Arguments:
 
