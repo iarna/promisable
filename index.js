@@ -26,7 +26,8 @@ var Promisable = module.exports = function Promisable(resolvecb) {
             if (chained.length) sendResult();
             if (is_undefish(A[0]) || chaincount>0 || passThroughErrors) return;
 
-            // If we were resolved with an error and w
+            // If we were resolved with an error and there are no attached
+            // handlers for it.
             process.nextTick(function() {
                 if (chained.length) sendResult();
                 if (chaincount>0 || passThroughErrors) return;
