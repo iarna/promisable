@@ -51,6 +51,14 @@ We also have shortcuts for making pre-resolved promises:
     var promise = Promisable.fulfill(value);
     var promise = Promisable.reject(error);
 
+Making callback/promise hybrid functions couldn't be easier:
+
+    function asyncThing(callback) {
+        return Promisable.andMaybeCallback(callback,function(resolve){
+            setTimeout(resolve.withoutErrors, 1000);
+        })
+    }
+
 Timing Issues
 -------------
 
@@ -230,6 +238,20 @@ Arguments:
 Returns:
 
 * Promise - A promise preresolved with error and value.
+
+#### `Promisable.andMaybeCallback([resultcb],resolvercb) -> Promise`
+
+Arguments:
+
+* resultcb = function (error, value)  May be null.
+* resolvercb  = function (Resolve[, args...])
+
+This constructs a promise using resolvercb and then, if resultcb is not
+null, passes resultcb to it to get a the result.  This is exactly equivalent
+to:
+
+    var promise = Promisable(resolvercb);
+    if (promise) promise(resultcb);
 
 ### `Resolve(error,value)`
 ### `Resolve(promise)`

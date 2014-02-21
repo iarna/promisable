@@ -108,4 +108,4 @@ var Promisable = module.exports = function Promisable(resolvecb) {
 Promisable.resolve = function (E,V) { return Promisable(function(R){ R(E,V) }) }
 Promisable.fulfill = function (V) { return Promisable(function(R){ R.fulfill(V) }) }
 Promisable.reject  = function (E) { return Promisable(function(R){ R.reject(E) }) }
-Promisable.withCB = function (then,resolvecb) { var P = Promisable(resolvecb); if (then) P(then); return P; }
+Promisable.andMaybeCallback = function (then,resolvecb) { var P = Promisable(resolvecb); if (then) P(then); return P; }
