@@ -12,10 +12,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
     var resolve = function resolve() {
         if (sendResult) { throw new Error("Promisable already resolved") }
         var A = arguments;
-        if ( A.length == 1 && typeof(A[0])==='function' ) {
-            A[0]( resolve );
-        }
-        else if ( A.length == 1 && is_thenable(A[0]) ) {
+        if ( A.length == 1 && is_thenable(A[0]) ) {
             A[0].then(resolve.fulfill, resolve.reject);
         }
         else if ( A.length == 2 && is_undefish(A[0]) && is_thenable(A[1]) ) {

@@ -17,7 +17,7 @@ var create = {
 function map(A,F) { for (var K in A) F(K,A[K]) }
 
 test("Continuable Style Tests", function(T) {
-    T.plan(22);
+    T.plan(21);
     map( create, function(kind,statuses) {
         map( statuses, function(result,create) {
             create()(function(E,V) {
@@ -76,10 +76,6 @@ test("Continuable Style Tests", function(T) {
     var C1 = Continue(function(R){ R(null,'OK') });
     Continue(function(R){ R(C1) })
             (function(E,V){ T.is(V,'OK', 'chained continuable resolve') });
-
-    var C2 = function(CB) { CB(null,'OK') }
-    Continue(function(R){ R(C2) })
-            (function(E,V){ T.is(V,'OK', 'chained continuable resolve w/raw function') });
 
     var msg = 'Promise that fails without catch throws the error';
     require('domain').create()
