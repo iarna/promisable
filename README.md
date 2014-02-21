@@ -28,15 +28,21 @@ resolve.withoutErrors which has a signature of `(value)`.
 Of course, you can directly call resolve yourself:
 
     var promise = Promisable(function(resolve){ resolve(null, 23) });
+
 Or:
+
     var promise = Promisable(function(resolve){ resolve.fulfill(23) });
 
 Similarly, you can resolve with an error:
 
     var promise = Promisable(function(resolve){ resolve(new Error("Bad")) });
+
 Or:
+
     var promise = Promisable(function(resolve){ resolve.reject(new Error("Bad")) });
+
 Or even:
+
     var promise = Promisable(function(resolve){ throw new Error("Bad") });
 
 We also have shortcuts for making pre-resolved promises:
