@@ -321,21 +321,21 @@ a function.
 If you provide an errorcb then it will be assumed you handled any errors.
 
 
-### `Promise.thenPromise(resolvecb) -> Promise`
+### `Promise.thenPromise(resolvercb) -> Promise`
 
 Arguments:
 
-* resolvecb = function (Resolve, value...)
+* resolvercb = function (Resolve, value...)
 
 Returns:
 
 * Promise - The new promise
 
 If the current promise is fulfilled then a new promise will be created with
-resolvecb as its resolver callback.  The resolvecb callback will be passed
+resolvercb as its resolver callback.  The resolvercb callback will be passed
 the usual Resolve object, plus the value that the current promise was
 fulfilled with. The new promise is then returned.  Errors thrown in
-resolvecb result in rejecting the new promise.
+resolvercb result in rejecting the new promise.
 
 If the current promise is rejected then that reject is just chained through
 to the returned promise.
