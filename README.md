@@ -51,8 +51,8 @@ We also have shortcuts for making pre-resolved promises:
     var promise = Promisable.fulfill(value);
     var promise = Promisable.reject(error);
 
-Promising Time
---------------
+Timing Issues
+-------------
 
 When a promise is resolved its callbacks are called as soon as possible, but
 no sooner then nextTick after the promise object is created.  This means
