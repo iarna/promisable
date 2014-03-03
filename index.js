@@ -2,6 +2,9 @@
 
 var is_undefish = function (V) { return V===null || typeof(V) === 'undefined' }
 var is_thenable = function (P) { return (! is_undefish(P)) && typeof(P.then)==='function' };
+var soon = process && process.nextTick ? process.nextTick : setImmediate ? setImmediate : function (cb) {
+    setTimeout(cb, 0);
+};
 
 var Promisable = module.exports = function Promisable(resolvecb) {
     var chained = [];
@@ -25,7 +28,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
 
             // If we were resolved with an error and there are no attached
             // handlers for it.
-            process.nextTick(function() {
+            soon(function() {
                 if (chained.length) sendResult();
                 if (chaincount>0 || passThroughErrors) return;
                 throw A[0];
@@ -62,7 +65,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
     var chainedErrorHandler = true;
 
     var promisable = function(then) {
-        if (sendResult) { process.nextTick(sendResult) }
+        if (sendResult) { soon(sendResult) }
         var chained_promise = Promisable( function (chained_resolve) {
             chained.push(function(E) {
                 try {
