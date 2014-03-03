@@ -1,10 +1,18 @@
 "use strict";
 
 var is_undefish = function (V) { return V===null || typeof(V) === 'undefined' }
-var is_thenable = function (P) { return (! is_undefish(P)) && typeof(P.then)==='function' };
-var soon = process && process.nextTick ? process.nextTick : setImmediate ? setImmediate : function (cb) {
-    setTimeout(cb, 0);
-};
+var is_thenable = function (P) { return (! is_undefish(P)) && typeof(P.then)==='function' }
+var soon;
+if (process && process.nextTick) {
+    // We have to wrap older Node as error domains may swap out what
+    // process.nextTick actually refers to =(
+    soon = (process.versions && process.versions.node && process.versions.node < '0.11')
+         ? function (CB) { process.nextTick(CB) }
+         : process.nextTick;
+}
+else {
+    soon = setImmediate ? setImmediate : function (CB) { setTimeout(CB,0) }
+}
 
 var Promisable = module.exports = function Promisable(resolvecb) {
     var chained = [];
