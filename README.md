@@ -71,7 +71,7 @@ that:
 
 Will print 23 at nextTick, but that:
 
-    Promisable(function(R){ setTimeout(function(){ R.fulfill(23) }, 1000)
+    Promisable(function(R){ setTimeout(function(){ R.fulfill(23) }, 1000) })
         .then(function(V){ console.log(V) });
 
 Will print 23 in one second, at the moment the setTimeout callback is
