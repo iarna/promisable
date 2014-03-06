@@ -1,7 +1,6 @@
 "use strict";
 
-var is_undefish = function (V) { return V===null || typeof(V) === 'undefined' }
-var is_thenable = function (P) { return (! is_undefish(P)) && typeof(P.then)==='function' }
+var is_thenable = function (P) { return P!=null && typeof(P.then)==='function' }
 var soon;
 if (process && process.nextTick) {
     // We have to wrap older Node as error domains may swap out what
@@ -26,13 +25,13 @@ var Promisable = module.exports = function Promisable(resolvecb) {
         if ( A.length == 1 && is_thenable(A[0]) ) {
             A[0].then(resolve.fulfill, resolve.reject);
         }
-        else if ( A.length == 2 && is_undefish(A[0]) && is_thenable(A[1]) ) {
+        else if ( A.length == 2 && A[0]==null && is_thenable(A[1]) ) {
             A[1].then(resolve.fulfill, resolve.reject);
         }
         else {
             sendResult = function(){ chained.forEach(function(T){ ++chaincount; T.apply(null,A) }); chained=[] }
             if (chained.length) sendResult();
-            if (is_undefish(A[0]) || chaincount>0 || passThroughErrors) return;
+            if (A[0]==null || chaincount>0 || passThroughErrors) return;
 
             // If we were resolved with an error and there are no attached
             // handlers for it.
@@ -53,7 +52,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
     };
 
     resolve.reject = function (E) {
-        if (arguments.length > 0 && (arguments.length!=1 || !is_undefish(E))) {
+        if (arguments.length > 0 && (arguments.length!=1 || E!=null)) {
             resolve.apply(null,arguments);
         }
         else {
@@ -94,7 +93,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
     promisable.then = function (success,failure) {
         if (!failure) chainedErrorHandler = false;
         return promisable(function (E,V) {
-            if (is_undefish(E)) {
+            if (E==null) {
                 if (success) return success(V);
             }
             else {
