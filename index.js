@@ -2,14 +2,15 @@
 var soon = require('./soon.js');
 var is_thenable = function (P) { return P!=null && typeof(P.then)==='function' }
 
+var id = 0;
 var Promisable = module.exports = function Promisable(resolvecb) {
     var chained = [];
     var sendResult = null;
     var chaincount = 0;
     var passThroughErrors = false;
-
+    var objid = ++id;
     var resolve = function resolve() {
-        if (sendResult) { throw new Error("Promisable already resolved") }
+        if (sendResult) { throw new Error(promisable+" already resolved") }
         var A = arguments;
         if ( A.length == 1 && is_thenable(A[0]) ) {
             A[0].then(resolve.fulfill, resolve.reject);
@@ -29,6 +30,8 @@ var Promisable = module.exports = function Promisable(resolvecb) {
             });
         }
     };
+
+    resolve.toString = function () { return "Promise(#"+objid+")" }
 
     resolve.passThroughErrors = function () { passThroughErrors = true }
 
@@ -76,7 +79,9 @@ var Promisable = module.exports = function Promisable(resolvecb) {
             });
         });
         return chained_promise;
-    };
+    }
+    promisable.toString = resolve.toString;
+
     promisable.then = function (success,failure) {
         if (!failure) chainedErrorHandler = false;
         return promisable(function (E,V) {
