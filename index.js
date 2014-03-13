@@ -65,7 +65,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
     var promisable = function(then) {
         if (sendResult) { soon.nextTick(sendResult) }
         var chained_promise = Promisable( function (chained_resolve) {
-            chained.push(function(E) {
+            chained.push(function() {
                 try {
                     var value = then.apply(null,arguments);
                     var next_result = typeof(value) !== 'undefined' ? [null,value] : arguments;
