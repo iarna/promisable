@@ -112,7 +112,7 @@ You can chain to promises too:
         // do more things
     })
 
-Because we also support A+ style promise APIs, including catch for capturing errors.
+Because we also support A+ style promise APIs:
 
     promise.then(function(files) {
         return Promisable(function(resolve){ fs.unlink(files[0], resolve.withoutErrors) });
@@ -145,6 +145,7 @@ forwarded down the chain as an error/rejection:
         throw new Error("bad");
     })
     .catch(function(error) {
+        console.error(error); // bad
     })
 
 And, *ahem*, finally, sometimes you want to execute something regardless if
@@ -342,6 +343,10 @@ a function.
 
 If you provide an errorcb then it will be assumed you handled any errors.
 
+The chained promise is resolved with the return value of the thencb/errorcb
+as appropriate, if there is one.  If there's no return value then the
+chained promise is resolved/rejected the same as the current promise.
+
 
 ### `Promise.thenPromise(resolvercb) -> Promise`
 
@@ -413,20 +418,19 @@ For the most part, these are compatible with Promises/A+ and their ilk, in
 so far as you can resolve an A+ promise with a promisable and vice versa.
 There are specific tests for Q and bluebird.
 
-Deviations From Promises
-------------------------
+Deviations From Other Promises
+------------------------------
 
 * Promises/A+ make resolving a promise more then once silently ignored.
   Resolving the same promise more then once is an error and should throw an
   exception rather then just ignoring its input. (One might argue that
   resolving a promise with the same result shouldn't be an error. Pull
   requests would be welcome.)
-* Promises/A+ says that resolving a promise should always wait until
-  nextTick to execute already existing callbacks. This slows down processing
-  without any actual value. Proponents of this conflate this with ensuring
-  that callback is not immediately called when it is declared, which is
-  valuable. (Relatedly, some implementations execute EACH callback in its
-  own nextTick callback, further slowing them down.)
-* Not catching errors is fatal-- to the best of my knowledge, no one else
-  does this.
-
+* Not catching errors is fatal. Similar to bluebird with
+  onPossiblyUnhandledRejection set to throw and .done with various
+  libraries.
+* The promise returned by the then/catch functions is resolved with the
+  return value of the then/catch callback, IF there is one. If there isn't,
+  the result of the previous promise is forwarded.  This DIFFERS from
+  Promises/A+ in that, in A+ the return value is always used, even if it's
+  empty.
