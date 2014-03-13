@@ -62,20 +62,14 @@ Making callback/promise hybrid functions couldn't be easier:
 Timing Issues
 -------------
 
-When a promise is resolved its callbacks are called as soon as possible, but
-no sooner then nextTick after the promise object is created.  This means
-that:
+Promise chains are called at nextTick (or as soon as possible) after the
+promise is fulfilled/rejected. This means that:
 
     Promisable(function(R){ R.fulfill(23) })
         .then(function(V){ console.log(V) });
+    console.log(13);
 
-Will print 23 at nextTick, but that:
-
-    Promisable(function(R){ setTimeout(function(){ R.fulfill(23) }, 1000) })
-        .then(function(V){ console.log(V) });
-
-Will print 23 in one second, at the moment the setTimeout callback is
-called.
+Will print 13 and then 23.
 
 Using Promisables
 -----------------

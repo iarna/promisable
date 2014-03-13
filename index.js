@@ -30,12 +30,10 @@ var Promisable = module.exports = function Promisable(resolvecb) {
         }
         else {
             sendResult = function(){ chained.forEach(function(T){ ++chaincount; T.apply(null,A) }); chained=[] }
-            if (chained.length) sendResult();
-            if (A[0]==null || chaincount>0 || passThroughErrors) return;
 
             soon.nextTick(function() {
                 if (chained.length) sendResult();
-                if (chaincount>0 || passThroughErrors) return;
+                if (A[0]==null || chaincount>0 || passThroughErrors) return;
                 throw A[0];
             });
         }
