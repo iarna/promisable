@@ -1,17 +1,6 @@
 "use strict";
-
+var soon = require('./soon.js');
 var is_thenable = function (P) { return P!=null && typeof(P.then)==='function' }
-var soon;
-if (process && process.nextTick) {
-    // We have to wrap older Node as error domains may swap out what
-    // process.nextTick actually refers to =(
-    soon = (process.versions && process.versions.node && process.versions.node < '0.11')
-         ? function (CB) { process.nextTick(CB) }
-         : process.nextTick;
-}
-else {
-    soon = setImmediate ? setImmediate : function (CB) { setTimeout(CB,0) }
-}
 
 var Promisable = module.exports = function Promisable(resolvecb) {
     var chained = [];
@@ -33,9 +22,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
             if (chained.length) sendResult();
             if (A[0]==null || chaincount>0 || passThroughErrors) return;
 
-            // If we were resolved with an error and there are no attached
-            // handlers for it.
-            soon(function() {
+            soon.nextTick(function() {
                 if (chained.length) sendResult();
                 if (chaincount>0 || passThroughErrors) return;
                 throw A[0];
@@ -72,7 +59,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
     var chainedErrorHandler = true;
 
     var promisable = function(then) {
-        if (sendResult) { soon(sendResult) }
+        if (sendResult) { soon.nextTick(sendResult) }
         var chained_promise = Promisable( function (chained_resolve) {
             chained.push(function(E) {
                 try {
