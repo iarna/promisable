@@ -13,10 +13,20 @@ var Promisable = module.exports = function Promisable(resolvecb) {
         if (sendResult) { throw new Error(promisable+" already resolved") }
         var A = arguments;
         if ( A.length == 1 && is_thenable(A[0]) ) {
-            A[0].then(resolve.fulfill, resolve.reject);
+            if (A[0].promiseableResolve) {
+                A[0].promisableResolve(promisable,resolve);
+            }
+            else {
+                A[0].then(resolve.fulfill, resolve.reject);
+            }
         }
         else if ( A.length == 2 && A[0]==null && is_thenable(A[1]) ) {
-            A[1].then(resolve.fulfill, resolve.reject);
+            if (A[1].promiseableResolve) {
+                A[1].promisableResolve(promisable,resolve);
+            }
+            else {
+                A[1].then(resolve.fulfill, resolve.reject);
+            }
         }
         else {
             sendResult = function(){ chained.forEach(function(T){ ++chaincount; T.apply(null,A) }); chained=[] }
@@ -72,6 +82,12 @@ var Promisable = module.exports = function Promisable(resolvecb) {
         return chained_promise;
     }
     promisable.toString = resolve.toString;
+    promisable.promisableResolve = function(resolve) {
+        if (sendResult) soon.nextTick(sendResult);
+        chained.push(function() {
+            resolve.apply(null,arguments);
+        });
+    }
 
     promisable.then = function (success,failure) {
         if (!failure) chainedErrorHandler = false;
