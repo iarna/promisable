@@ -29,7 +29,12 @@ var Promisable = module.exports = function Promisable(resolvecb) {
             }
         }
         else {
-            sendResult = function(){ chained.forEach(function(T){ ++chaincount; T.apply(null,A) }); chained=[] }
+            sendResult = function(){
+                for (var ii=0; ii<chained.length; ++ii, ++chaincount) {
+                    chained[ii].apply(null,A);
+                }
+                chained = [];
+            }
 
             soon.nextTick(function() {
                 if (chained.length) sendResult();
