@@ -9,6 +9,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
     var chaincount = 0;
     var passThroughErrors = false;
     var objid = ++id;
+    var domain = global.process ? global.process.domain : null;
     var resolve = function resolve() {
         if (sendResult) { throw new Error(promisable+" already resolved") }
         var A = arguments;
@@ -36,11 +37,11 @@ var Promisable = module.exports = function Promisable(resolvecb) {
                 chained = [];
             }
 
-            soon.nextTick(function() {
-                if (chained.length) sendResult();
-                if (A[0]==null || chaincount>0 || passThroughErrors) return;
-                throw A[0];
-            });
+            if (domain) sendResult = domain.bind(sendResult);
+            soon.asPossible(sendResult);
+            if (A[0]==null) return;
+            soon.ish( domain ? function () { if (chaincount>0 || passThroughErrors) return; domain.emit('error',A[0]) }
+                             : function () { if (chaincount>0 || passThroughErrors) return; throw A[0] } );
         }
     };
 
@@ -66,7 +67,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
     var chainedErrorHandler = true;
 
     var promisable = function(then) {
-        if (sendResult) { soon.nextTick(sendResult) }
+        if (sendResult) { soon.asPossible(sendResult) }
         var chained_promise = Promisable( function (chained_resolve) {
             chained.push(function() {
                 try {
@@ -86,7 +87,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
     }
     promisable.toString = resolve.toString;
     promisable.promisableResolve = function(resolve) {
-        if (sendResult) soon.nextTick(sendResult);
+        if (sendResult) soon.asPossible(sendResult);
         chained.push(function() {
             resolve.apply(null,arguments);
         });
