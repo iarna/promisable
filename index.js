@@ -1,6 +1,13 @@
 "use strict";
 var soon = require('./soon.js');
 var is_thenable = function (P) { return P!=null && typeof(P.then)==='function' }
+var makeExceptionClass = require('./make-exception-class.js');
+
+var DefaultRejection = makeExceptionClass("PromiseRejected");
+
+var AlreadyResolved = makeExceptionClass("PromiseAlreadyResolved", function (promise) {
+    this.message = promise ? promise.toString() : null;
+});
 
 var id = 0;
 var Promisable = module.exports = function Promisable(resolvecb) {
@@ -11,7 +18,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
     var objid = ++id;
     var domain = global.process ? global.process.domain : null;
     var resolve = function resolve() {
-        if (sendResult) { throw new Error(promisable+" already resolved") }
+        if (sendResult) { throw new AlreadyResolved(promisable) }
         var A = arguments;
         if ( A.length == 1 && is_thenable(A[0]) ) {
             if (A[0].promiseableResolve) {
@@ -60,7 +67,7 @@ var Promisable = module.exports = function Promisable(resolvecb) {
             resolve.apply(null,arguments);
         }
         else {
-            resolve(new Error("Promise rejected"));
+            resolve(new DefaultRejection());
         }
     };
 
@@ -129,4 +136,4 @@ var Promisable = module.exports = function Promisable(resolvecb) {
 Promisable.resolve = function (E,V) { return Promisable(function(R){ R(E,V) }) }
 Promisable.fulfill = function (V) { return Promisable(function(R){ R.fulfill(V) }) }
 Promisable.reject  = function (E) { return Promisable(function(R){ R.reject(E) }) }
-Promisable.andMaybeCallback = function (then,resolvecb) { var P = Promisable(resolvecb); if (then) P(then); return P; }
+Promisable.andMaybeCallback = function (then,resolvecb) { var P = Promisable(resolvecb); if (then) P(then); return P }

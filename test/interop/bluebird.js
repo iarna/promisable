@@ -6,8 +6,7 @@ var name = "bluebird";
 interop( name,
     function(){ return require('bluebird') },
     function (bluebird,cb) {
-        var deferred = new bluebird(function(resolve,reject) {
+        return new bluebird(function(resolve,reject) {
             cb( resolve, reject );
         });
-        return deferred;
     });
