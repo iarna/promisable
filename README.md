@@ -1,7 +1,7 @@
 Promisable
 ----------
 
-Promises meet continuables
+[![Build Status](https://travis-ci.org/iarna/promisable.svg?branch=master)](https://travis-ci.org/iarna/promisable)
 
 Making Promises
 ---------------
