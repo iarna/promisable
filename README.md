@@ -3,6 +3,10 @@ Promisable
 
 [![Build Status](https://travis-ci.org/iarna/promisable.svg?branch=master)](https://travis-ci.org/iarna/promisable)
 
+For speed/memory improvements but the same API, check out
+promisable-bluebird, which is a cut down and modified version of bluebird
+with the same API as Promisable.
+
 Making Promises
 ---------------
 
