@@ -14,7 +14,9 @@
   "devDependencies": {
     "tape": "~1.0.4",
     "q": "*",
-    "bluebird": "*"
+    "bluebird": "*",
+    "when": "*",
+    "rsvp": "*"
   },
   "license": "BSD"
 }
