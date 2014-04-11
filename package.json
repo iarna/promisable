@@ -5,7 +5,7 @@
   "dependencies": {},
   "main": "index.js",
   "scripts": {
-    "test": "node node_modules/tape/bin/tape $(find test -name '*.js')"
+    "test": "make ; tape $(find test -name '*.js')"
   },
   "repository": {
     "type": "git",
